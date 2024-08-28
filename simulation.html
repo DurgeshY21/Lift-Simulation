@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lift Simulation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="building"></div>
+
+  <script src="script.js"></script>
+  <script>
+    // Get the number of floors and lifts from localStorage
+    const numberOfFloors = localStorage.getItem('floors');
+    const numberOfLifts = localStorage.getItem('lifts');
+
+    if (numberOfFloors && numberOfLifts) {
+      // Initialize the simulation with stored values
+      initializeState(parseInt(numberOfFloors), parseInt(numberOfLifts));
+    } else {
+      // If no data is found, redirect back to the input page
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lift Simulation </title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Lift Simulation</h1>
+  <div id="controls">
+    
+    <label for="floors">Number of Floors:</label>
+    <input type="number" id="floors" min="2" value="5">
+    <label for="lifts">Number of Lifts:</label>
+    <input type="number" id="lifts" min="1" value="2">
+    <button onclick="initializeSimulation()">Initialize Simulation</button>
+  </div>
+
+  <script>
+    function initializeSimulation() {
+      const numberOfFloors = document.getElementById('floors').value;
+      const numberOfLifts = document.getElementById('lifts').value;
+      
+      // Store the user input in localStorage
+      localStorage.setItem('floors', numberOfFloors);
+      localStorage.setItem('lifts', numberOfLifts);
+      
+      // Redirect to the simulation page
+      window.location.href = 'simulation.html';
+    }
+  </script>
+</body>
+</html>
