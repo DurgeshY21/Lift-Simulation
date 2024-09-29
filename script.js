@@ -88,27 +88,34 @@ const initializeSimulation = () => {
 };
 
 
-  const requestLift = (floorId, direction) => {
-    // Add request to the list
-    state.requests.push({ floorId, direction });
-    console.log(`Request received for floor ${floorId} to go ${direction}`);
+const requestLift = (floorId, direction) => {
+  // Validate the floor request
+  if (floorId < 0 || floorId >= state.floors.length) {
+    console.error(`Invalid floor request: ${floorId}`);
+    return; // Ignore invalid requests
+  }
 
-    // Process the request
-    processRequests();
-  };
+  // Add request to the list
+  state.requests.push({ floorId, direction });
+  console.log(`Request received for floor ${floorId} to go ${direction}`);
+
+  // Process the request
+  processRequests();
+};
+
 
   const processRequests = () => {
     if (state.requests.length === 0) return;
-
+  
     // Process the first request in the queue
     const request = state.requests.shift();
-
+  
     // Find the closest available lift to the requested floor
     let closestLift = null;
     let shortestDistance = Infinity;
-
+  
     state.lifts.forEach(lift => {
-      if (!lift.moving) {
+      if (!lift.moving && !lift.doorsOpen) { // Check if lift is not moving and doors are closed
         const distance = Math.abs(lift.currentFloor - request.floorId);
         if (distance < shortestDistance) {
           closestLift = lift;
@@ -116,62 +123,77 @@ const initializeSimulation = () => {
         }
       }
     });
-
+  
     if (closestLift) {
       // Move the closest lift to the requested floor
       moveLift(closestLift, request.floorId);
     }
   };
-
+  
   const moveLift = (lift, targetFloor) => {
-    if (lift.moving) return;
-
-    if (lift.currentFloor === targetFloor) {
-      console.log(`Lift ${lift.id} is already at floor ${targetFloor}`);
-      openLiftDoors(lift);
-      return; // If lift is already at the target floor, do nothing more
+    if (lift.moving || lift.doorsOpen) return; // Prevent moving if the lift is already busy
+  
+    // Validate target floor
+    if (targetFloor < 0 || targetFloor >= state.floors.length) {
+      console.error(`Invalid target floor: ${targetFloor}`);
+      return; // Ignore invalid moves
     }
-
-    lift.moving = true;
+  
+    lift.moving = true; // Mark lift as busy
     const liftElement = document.getElementById(`lift-${lift.id}`);
     liftElement.classList.add('moving');
-
+  
     const currentFloor = lift.currentFloor;
     const distance = Math.abs(targetFloor - currentFloor);
     const moveDuration = distance * 2000; // Adjust based on speed of lift movement
-
-    // Simulate lift movement
+  
+    // Move the lift
     liftElement.style.transition = `bottom ${moveDuration}ms linear`;
     liftElement.style.bottom = `${targetFloor * floorHeight}px`;
-
-    // Update lift state after movement
+  
     setTimeout(() => {
       lift.currentFloor = targetFloor;
-      lift.moving = false;
+      lift.moving = false; // Mark lift as available after movement
       liftElement.classList.remove('moving');
-
-      // Simulate door opening after reaching the floor
-      openLiftDoors(lift);
-
-      // Continue processing any remaining requests
-      processRequests();
+  
+      // Open the doors once the lift arrives
+      openLiftDoors(lift, () => {
+        setTimeout(() => {
+          closeLiftDoors(lift);
+          setTimeout(processRequests, 500); // Continue processing requests after doors close
+        }, 3000); // Wait for 3 seconds before closing doors
+      });
     }, moveDuration);
   };
-
-  const openLiftDoors = (lift) => {
+  
+  
+  
+  const openLiftDoors = (lift, callback) => {
+    if (lift.moving || lift.doorsOpen) return;
+  
     lift.doorsOpen = true;
     const liftElement = document.getElementById(`lift-${lift.id}`);
     liftElement.classList.add('doors-open');
     console.log(`Lift ${lift.id} doors opening at floor ${lift.currentFloor}`);
-
-    // Simulate doors closing after a delay
+  
+    // Ensure doors stay open for at least 3 seconds before proceeding
     setTimeout(() => {
-      lift.doorsOpen = false;
-      liftElement.classList.remove('doors-open');
-      console.log(`Lift ${lift.id} doors closing`);
-    }, 3000); // Doors stay open for 3 seconds
+      if (callback) {
+        callback(); // Trigger any callback function after doors open
+      }
+    }, 3000);  // Doors stay open for 3 seconds before closing
   };
-
+  
+  const closeLiftDoors = (lift) => {
+    if (!lift.doorsOpen) return;
+  
+    lift.doorsOpen = false;
+    const liftElement = document.getElementById(`lift-${lift.id}`);
+    liftElement.classList.remove('doors-open');
+    console.log(`Lift ${lift.id} doors closing`);
+  };
+  
+  
   // Initialize the simulation
   initializeSimulation();
 

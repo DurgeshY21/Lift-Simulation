@@ -13,15 +13,15 @@ body {
 /* Controls styling */
 #controls {
   display: flex;
-  flex-direction: column; /* Arrange children in a column */
+  flex-direction: column;
   align-items: center;
   text-align: center;
   gap: 15px;
   margin-bottom: 30px;
   background-color: #03A2FF;
   padding: 20px;
-  /* width: 300px; */
-  height: 300px;
+  width: 100%; /* Full width */
+  max-width: 400px; /* Max width for larger screens */
   border-radius: 15px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
@@ -36,8 +36,8 @@ body {
 
 #controls input {
   padding: 8px;
-  width: 150px; /* Increased width for better visibility */
-  margin-bottom: 10px; /* Added margin for spacing */
+  width: 100%; /* Full width input */
+  margin-bottom: 10px;
   border: none;
   border-radius: 5px;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -51,7 +51,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-top: 10px; /* Added margin for spacing */
+  margin-top: 10px;
   font-size: 16px;
 }
 
@@ -65,6 +65,7 @@ body {
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
+  width: 100%; /* Full width */
 }
 
 .floor {
@@ -99,7 +100,6 @@ body {
   justify-content: center;
   align-items: center;
   color: white;
-  
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -132,6 +132,12 @@ body {
 }
 
 /* Button styling */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Add space between the buttons */
+}
+
 button {
   padding: 8px 12px;
   background-color: #4caf50;
@@ -141,69 +147,30 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   font-size: 14px;
-  cursor: pointer;
 }
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px; /* Add space between the buttons */
-}
-
 
 button:hover {
   background-color: #45a049;
   transform: scale(1.05);
 }
 
-#building {
-  position: relative;
-  border: 1px solid black;
-  
-}
+/* Media Queries for Responsiveness */
+@media (max-width: 500px) {
+  #controls {
+    padding: 10px; /* Adjust padding for smaller screens */
+    width: 90%; /* Full width on smaller screens */
+  }
 
-.floor {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* border-bottom: 1px solid gray; */
-  padding: 20px;
-}
+  .floor {
+    padding: 5px; /* Adjust floor padding */
+  }
 
-.lift {
-  position: absolute;
-  background-color: gray;
-  transition: bottom 2s linear;
-  height: 100%; /* The lift should be as tall as the floor */
-}
+  .lift {
+    width: 40px; /* Smaller lift width */
+    height: 60px; /* Smaller lift height */
+  }
 
-.doors {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  .floor span {
+    font-size: 16px; /* Smaller text size */
+  }
 }
-
-.door {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background-color: white;
-  transition: transform 0.3s ease-in-out;
-}
-
-.door-left {
-  left: 0;
-}
-
-.door-right {
-  right: 0;
-}
-
-.doors-open .door-left {
-  transform: translateX(-100%);
-}
-
-.doors-open .door-right {
-  transform: translateX(100%);
-}
-
