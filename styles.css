@@ -155,7 +155,7 @@ button:hover {
 }
 
 /* Media Queries for Responsiveness */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   #controls {
     padding: 10px; /* Adjust padding for smaller screens */
     width: 90%; /* Full width on smaller screens */
