@@ -170,6 +170,21 @@ button:hover {
   padding: 20px;
 }
 
+.floor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: calc(100% - 40px); /* Dynamic width with some margin */
+  padding: 15px 20px;
+  margin: 8px 0;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
 .lift {
   position: absolute;
   background-color: gray;
